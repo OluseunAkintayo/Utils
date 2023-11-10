@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script>
+    function mby5(num) {
+      return num * 5;
+    }
+    // console.log(mby5.__proto__.__proto__);
+    // console.log(String.prototype)
+
+    // add a new method .lastYear() to the Date constructor
+    Date.prototype.lastYear = function () {
+      // this.setFullYear(this.getFullYear() - 1);
+      console.log('Last year: ', this.getFullYear() - 1);
+      return this.getFullYear();
+    }
+    const myDate = new Date('1990-10-11');
+    console.log('This year: ', myDate.getFullYear());
+    myDate.lastYear();
+    // console.log(myDate);
+
+    // factory functions
+    function createElf(name, weapon) {
+      return {
+        name,
+        weapon,
+        attack() {
+          return `attack with ${this.weapon}`
+        }
+      }
+    }
+    const elf1 = createElf('Orwell', 'sword');
+    console.log(elf1);
+    console.log(elf1.attack());
+
+    // Object.create - another method of creating objects
+    const elfFunctions = {
+      attack() {
+        return `Attack with ${this.weapon}`
+      }
+    }
+    function createElf2(name, weapon) {
+      const elf = Object.create(elfFunctions);
+      elf.name = name;
+      elf.weapon = weapon;
+      return elf;
+    }
+
+    const aiden = createElf2('Aiden', 'bow');
+    console.log(aiden);
+    console.log(aiden.attack()); // returns 'Attack with bow'
+
+    // constructor functions - another method for creating objects
+    function Elf(name, weapon) {
+      this.name = name;
+      this.weapon = weapon;
+    }
+
+    Elf.prototype.attack = function () {
+      return `attack with ${this.weapon}`;
+    }
+
+    const roman = new Elf('Roman', 'Nunchuks');
+    console.log(roman.__proto__);
+    console.log(roman.attack());
+
+    const a = new Number(5)
+    console.log("valueof", a.valueOf)
+    console.log(a.__proto__);
+
+    // creating objects with classes
+    class Elf2 {
+      constructor(name, weapon) {
+        this.name = name;
+        this.weapon = weapon;
+      }
+      attack() {
+        return `Class attack with ${this.weapon}`;
+      }
+    }
+    const gandalf = new Elf2('Gandalf', 'staff');
+    console.log(gandalf);
+
+    // class inheritance
+    class Vehicle {
+      constructor(name, model) {
+        this.name = name;
+        this.model = model
+      }
+      getSpeed() {
+        return 230;
+      }
+    }
+
+    // NB: we can prefix private fields and methods with the # symbol
+
+    class Car extends Vehicle {
+      #carAge;
+      constructor(name, model, year) {
+        super(name, model); // lets the Car class inherit the other properties from the Vehicle class
+        this.year = year;
+        this.#carAge = 7;
+      }
+      #getAge() {
+        return this.#carAge;
+      }
+      // calling Car.#getAge outside of this class results in a private field error
+    }
+    const camry = new Car("Toyota", "Camry", 2009);
+
+    // compose
+    const multiplyByFour = (num) => num * 4;
+    const takeAbsolute = (num) => Math.abs(num);
+    const takeSqrt = (num) => Math.sqrt(num);
+    const compose = (x, y, z) => (data) => x(y(z(data)));
+    const finalResult = compose(takeSqrt, multiplyByFour, takeAbsolute)
+    console.log(`final result is`, finalResult(-16));
+
+    // Mini shopping cart
+    const user = {
+      name: 'Kim',
+      active: true,
+      cart: [],
+      purchases: []
+    }
+
+    // the aim is to
+    // - add an item to the cart
+    // - add 3% VAT to cart item
+    // - buy item: cart -> purchases
+    // - empty cart
+
+    const addToCart = (user, item) => {
+      const udpdatedCart = user.cart.concat(item);
+      return Object.assign({}, user, { cart: udpdatedCart });
+    };
+    const applyTax = (user) => {
+      const updatedCart = user.cart.map(item => {
+        return {
+          name: item.name,
+          price: item.price * 1.15
+        }
+      });
+      return Object.assign({}, user, { cart: updatedCart });
+    };
+    const buy = (user) => {
+      return Object.assign({}, user, { purchases: user.cart });
+    };
+    const emptyCart = (user) => {
+      return Object.assign({}, user, { cart: [] });
+    };
+    const purchaseItem = (...fns) => fns.reduce(composeCart);
+    const composeCart = (f, g) => (...args) => f(g(...args));
+    console.log(purchaseItem(emptyCart, buy, applyTax, addToCart)(user, [{ name: 'Macbook', price: 2999 }, { name: 'HP Monitor', price: 288 }]));
+
+    // Promises
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/users');
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        console.log("Fetch finished");
+      }
+    }
+
+    // fetchUsers();
+
+    const promiseOne = new Promise((resolve, reject) => setTimeout(resolve, 3000));
+    const promiseTwo = new Promise((resolve, reject) => setTimeout(reject, 3000));
+    const promiseThree = new Promise((resolve, reject) => setTimeout(resolve, 3000));
+    Promise.all([promiseOne, promiseTwo, promiseThree]).then(data => console.log(data)).catch(e => console.log('Something went wrong'));
+    // To fix this, we use the Promise.allSettled() method - this runs all promises whether resolved or rejected:
+    Promise.allSettled([promiseOne, promiseTwo, promiseThree]).then(data => console.log(data)).catch(e => console.log('Something went wrong'));
+
+  </script>
+</head>
+
+<body>
+  <h1>JS</h1>
+</body>
+
+</html>
