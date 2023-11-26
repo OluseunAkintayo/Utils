@@ -64,7 +64,9 @@ Algorithms - steps that can be taken to manipulate data
 
 #### Big O Notation
 This is used to measure how long an algorithm takes to run. Big O measures how efficient a code is (how many operations it has to run) when the number of inputs increase.
+<br />
 <img src="./big-o-complexity.png" />
+<br />
 Given the function:
 ```
   const nemo = ['nemo'];
