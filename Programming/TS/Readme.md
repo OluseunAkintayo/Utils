@@ -139,3 +139,23 @@ interface Product {
 }
 ```
 In this case, the warranty field is optional so typescript will not throw any error if the field is absent.
+
+##### Discriminated Unions
+Suppose you want to return some kind of message when a usee tries to create an account on your platform, and suppose there are three categories for these messages: success, password complexity notification, and for an existing username. We can do this in TS using discrimintated unions:
+
+
+### Generics
+Suppose we want to get the first number in an array of numbers, we can write a function thus:
+```
+const getFirstNumber = (arr: number[]): number  | undefined => {
+  if(arr.length > 0) return arr[0];
+  return undefined;
+}
+```
+This function works for arrays of numbers but it doesn't work with other types like strings or objects. If we want to make this more 'generic', i.e., return more than one data type, we can write the function as:
+```
+ function getFirst<T>(arr: T[]): T | undefined {
+  if(arr.length > 0) return arr[0];
+	return undefined;
+}
+```

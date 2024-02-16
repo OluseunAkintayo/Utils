@@ -1,6 +1,6 @@
 # Utils
 
-A collection of learning points spanning siftware development, software engineering and {coding} interviews
+A collection of learning points spanning software development in different programming languages, and coding interviews.
 
 ### Programming
 - JS
