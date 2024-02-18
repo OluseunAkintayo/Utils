@@ -651,7 +651,7 @@ Exception handling should only be used to deal with exceptional (read unexpected
 ## Arrays and Collections
 Arrays and collections lets us handle grouping, ordering, storing and accessing objects.
 - Arrays are defined using square brackets `[]`
-- An array size must ne defined upon initialization and cannot be changed thereafter. This restriction makes them less flexible.
+- An array size must be defined upon initialization and cannot be changed thereafter. This restriction makes them less flexible.
 - Collections provide more flexibility
 - items can be easily added to and removed from collections
 
@@ -690,11 +690,82 @@ Console.WriteLine(persons[0].Name); // returns Jameson
 ```
 
 #### Generic Stack (`Stack<T>`)
-- The generic Stack is a strongly-types collection that implements the Last-In. First-Out principle.
+- The generic Stack is a strongly-typed collection that implements the Last-In, First-Out principle.
 - The `push` method adds an item to the stack
 - The `pop` method removes an item from the stack
 - The `peek` methos lets us look at the item at the top of the stack without removing it
+- An enumerator such as `foreach` can be used on a Stack
+- Stacks are preferrable if the order is important
+- Stacks have no indexer, which means you cannot access an element at an index using `stack[i]`
+```
+var countries  = new Stack<string>();
+
+countries.Push("USA");
+countries.Push("Germany");
+countries.Push("England");
+countries.Push("Russia");
+
+Console.WriteLine(countries.Peek());
+Console.WriteLine(countries.Pop());
+countries.Push("Indonesia");
+Console.WriteLine(countries.Pop());
+```
 
 
+#### Generic Queues (`Queue<T>`)
+- The generic queue is a strongly-typed collection that implements the First-In, First-Out principle, i.e. the oder in which items are added to the queue is retained
+- The `Enqueue` method adds an item to the queue
+- The `Dequque` method removes the next item from the queue
+- The `Peek` method is used to look at the next item without removing it from the queue
+- Enumerators can be used on Queues
+- We cannot access items in the middle of the queue (no indexer)
+```
+var messages = new Queue<string>();
+messages.Enqueue("Jameson is online");
+messages.Enqueue("Pam is offline");
+messages.Enqueue("Mike is available");
 
-### Collections
+while (messages.Count > 0) {
+	var message = messages.Dequeue();
+	Console.WriteLine(message);
+}
+```
+
+#### Generic Dictionary (`Dictionary<TKey, TValue>`)
+- It accepts teo generic type argiments
+- A dictionary provides a key-value pair
+- The keys are unique
+- Items can be added using the `dictionary.Add(key, value)` method
+- Items can also be added using the `dictionary.TryAdd(key, value)` method. This checks if an item with the speified key already exists before proceeding to add it to the dictionary.
+- Items can be removed using the `dictionary.Remove(key)` method
+- Items can be accessed using the indexer `dictionary[key]` or by calling the `TryGetValue(key, our var value)` method
+- The `dictionary.Keys` returns a list of all keys in the dictionary
+- The `dictionary.Values` returns a list of all values in the dictionary
+- The `dictionary.ContainsKey(key)` checks if an item with the specified key is in the dictionary
+- The `dictionary.Values` returns a list of all values in the dictionary
+- Adding and removing items are fast operations.
+- Accessing items using keys is faster with a dictionary (largely because of unique keys) compared to accessting a `List<T>`. The difference becomes quie noticable as the size grows.
+- A dictionary can be used as a staic or dynamic lookup table
+```
+var grades = new Dictionary<int, string>{
+	{ 6, "Perfect" },
+	{  5, "Excellent" },
+	{ 4, "Good" }
+};
+
+Console.WriteLine(grades[4]);
+grades.TryAdd(4, "Almost");
+Console.WriteLine($"\n{grades[4]}");
+
+try {
+	var item = grades[2];
+	Console.WriteLine(item);
+}
+catch (System.Exception exception) {
+	Console.WriteLine(exception.Message);
+}
+
+foreach (var grade in grades ) {
+	Console.WriteLine(grade);
+}
+```
